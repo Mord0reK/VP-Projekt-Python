@@ -112,9 +112,11 @@ print()
 
 print("Czy wygenerować nowe dane? (T/N)")
 
-if input() == "T":
+wybor = input()
+
+if wybor == "T" or wybor == "t" or wybor == "Y" or wybor == "y":
     generuj_dane()
-elif input() == "N":
+elif wybor == "N" or wybor == "n":
     pass
 else:
     pass
