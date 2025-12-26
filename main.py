@@ -112,14 +112,14 @@ print()
 
 print("Czy wygenerować nowe dane? (T/N)")
 
-wybor = input()
-
-if wybor == "T" or wybor == "t" or wybor == "Y" or wybor == "y":
-    generuj_dane()
-elif wybor == "N" or wybor == "n":
-    pass
-else:
-    pass
+while True:
+    wybor = input().strip().lower()
+    if wybor in ("t", "y"):
+        generuj_dane()
+        break
+    if wybor == "n":
+        break
+    print("Wpisz T lub N")
 
 print()
 print("Wybierz algorytm sortowania:")
@@ -130,12 +130,28 @@ print("4. Sortowanie szybkie (Quick Sort)")
 print("5. Sortowanie kubełkowe (Bucket Sort)")
 print()
 
-with open("dane.txt", "r") as plik:
-    tablica = plik.readlines()
-    for i in range(len(tablica)):
-        tablica[i] = int(tablica[i])
+try:
+    with open("dane.txt", "r") as plik:
+        tablica = []
+        for linia in plik:
+            s = linia.strip()
+            if s:
+                tablica.append(int(s))
+    if not tablica:
+        print("Brak danych w dane.txt")
+        exit()
+except FileNotFoundError:
+    print("Brak pliku dane.txt")
+    exit()
+except ValueError:
+    print("W dane.txt jest linia, która nie jest liczbą")
+    exit()
 
-wybor = input()
+while True:
+    wybor = input().strip()
+    if wybor in ("1", "2", "3", "4", "5"):
+        break
+    print("Wpisz liczbę 1-5")
 
 if wybor == "1":
     zloznosc = str("O(n^2)")
@@ -178,3 +194,5 @@ elif wybor == "5":
     wstaw_do_pliku(tablica, czas, zloznosc, "wynik.txt")
 else:
     print("Wybrano zły typ sortowania.")
+
+print("Posortowane.")
