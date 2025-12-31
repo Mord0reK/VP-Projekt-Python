@@ -4,7 +4,7 @@ import time
 # Funkcja do sortowania bąbelkowego (Bubble Sort)
 def babelkowe(tablica):
     for j in range(0, len(tablica) - 1):
-        for i in range(0, len(tablica) - 1):
+        for i in range(0, len(tablica) - 1 - j):
             if tablica[i] > tablica[i + 1]:
                 tablica[i], tablica[i + 1] = tablica[i + 1], tablica[i]
 
@@ -25,7 +25,7 @@ def wstawianie(tablica):
             tablica[j + 1] = tablica[j]
             j -= 1
 
-        tablica[j + 1] = pom  # wstawienie wartości zmiennej pom w odpowiednie miejsce
+        tablica[j + 1] = pom
 
 # Funkcja do sortowania przez wybieranie (Selection Sort)
 def wybieranie(tablica):
@@ -72,8 +72,8 @@ def kubelkowe(tablica):
 
     liczniki = [0] * (maks - mini + 1)
 
-    for i in range(len(tablica)):
-        liczniki[tablica[i] - mini] += 1
+    for x in tablica:
+        liczniki[x - mini] += 1
 
     j = 0
 
@@ -85,12 +85,15 @@ def kubelkowe(tablica):
 
 
 # Funkcja do wstawiania wykonanego sortowania do pliku
-def wstaw_do_pliku(tablica, czas, zloznosc, nazwa_pliku):
-    with open(nazwa_pliku, "w") as plik:
+def wstaw_do_pliku(tablica, czas, zloznosc, algorytm):
+    nazwa_pliku = f"wynik_{algorytm.lower().replace(' ', '_')}.txt"
 
-        tekst = f"Czas wykonania: {str(czas)} sekund. \nZłożność obliczeniowa algorytmu: {zloznosc} \nPosortowane liczby: \n"
+    with open(nazwa_pliku, "w") as plik:
+        tekst = (f"Algorytm: {algorytm}\n"  
+                 f"Czas wykonania: {czas:.6f} sekund.\n"
+                 f"Złożoność: {zloznosc}\n"
+                 f"Posortowane liczby:\n\n")
         plik.write(tekst)
-        plik.write("\n")
 
         for element in tablica:
             plik.write(str(element))
@@ -121,15 +124,6 @@ while True:
         break
     print("Wpisz T lub N")
 
-print()
-print("Wybierz algorytm sortowania:")
-print("1. Sortowanie bąbelkowe (Bubble Sort)")
-print("2. Sortowanie przez wstawianie (Insertion Sort)")
-print("3. Sortowanie przez wybieranie (Selection Sort)")
-print("4. Sortowanie szybkie (Quick Sort)")
-print("5. Sortowanie kubełkowe (Bucket Sort)")
-print()
-
 try:
     with open("dane.txt", "r") as plik:
         tablica = []
@@ -147,6 +141,15 @@ except ValueError:
     print("W dane.txt jest linia, która nie jest liczbą")
     exit()
 
+print()
+print("Wybierz algorytm sortowania:")
+print("1. Sortowanie bąbelkowe (Bubble Sort)")
+print("2. Sortowanie przez wstawianie (Insertion Sort)")
+print("3. Sortowanie przez wybieranie (Selection Sort)")
+print("4. Sortowanie szybkie (Quick Sort)")
+print("5. Sortowanie kubełkowe (Bucket Sort)")
+print()
+
 while True:
     wybor = input().strip()
     if wybor in ("1", "2", "3", "4", "5"):
@@ -159,7 +162,7 @@ if wybor == "1":
     start = time.time()
     babelkowe(tablica)
     czas = round(time.time() - start, 4)
-    wstaw_do_pliku(tablica, czas, zloznosc, "wynik.txt")
+    wstaw_do_pliku(tablica, czas, zloznosc, "Sortowanie bąbelkowe")
 
 elif wybor == "2":
     zloznosc = str("O(n^2)")
@@ -167,7 +170,7 @@ elif wybor == "2":
     start = time.time()
     wstawianie(tablica)
     czas = round(time.time() - start, 4)
-    wstaw_do_pliku(tablica, czas, zloznosc, "wynik.txt")
+    wstaw_do_pliku(tablica, czas, zloznosc, "Sortowanie przez wstawianie")
 
 elif wybor == "3":
     zloznosc = str("O(n^2)")
@@ -175,7 +178,7 @@ elif wybor == "3":
     start = time.time()
     wybieranie(tablica)
     czas = round(time.time() - start, 4)
-    wstaw_do_pliku(tablica, czas, zloznosc, "wynik.txt")
+    wstaw_do_pliku(tablica, czas, zloznosc, "Sortowanie przez wybieranie")
 
 elif wybor == "4":
     zloznosc = str("Optymalna: O(n log n), Pesymistyczna: O(n^2)")
@@ -183,7 +186,7 @@ elif wybor == "4":
     start = time.time()
     szybkie(tablica)
     czas = round(time.time() - start, 4)
-    wstaw_do_pliku(tablica, czas, zloznosc, "wynik.txt")
+    wstaw_do_pliku(tablica, czas, zloznosc, "Sortowanie szybkie")
 
 elif wybor == "5":
     zloznosc = str("O(n^2)")
@@ -191,8 +194,8 @@ elif wybor == "5":
     start = time.time()
     kubelkowe(tablica)
     czas = round(time.time() - start, 4)
-    wstaw_do_pliku(tablica, czas, zloznosc, "wynik.txt")
+    wstaw_do_pliku(tablica, czas, zloznosc, "Sortowanie kubełkowe")
 else:
     print("Wybrano zły typ sortowania.")
 
-print("Posortowane.")
+print("Posortowane. Program zakończył działanie.")
